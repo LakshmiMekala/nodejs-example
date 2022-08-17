@@ -27,9 +27,9 @@ pipeline {
                         // appimage.push("${commitId}")
                         appImage.push("${env.BUILD_NUMBER}")
                         if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release') {
-                            appimage.push('latest')
+                            appImage.push('latest')
                             if (env.BRANCH_NAME == 'release') {
-                                appimage.push('app-${commitId}')
+                                appImage.push('app-${commitId}')
                             }
                         }
                     }
