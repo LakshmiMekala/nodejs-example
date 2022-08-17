@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         registry = "lmekala/nodejsexample"
-        registryCredential = 'docker_creds'
+        registryCredential = 'docker_Creds'
         dockerImage = ''
     }
     stages  {
