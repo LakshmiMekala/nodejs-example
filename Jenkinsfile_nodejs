@@ -22,36 +22,19 @@ pipeline {
                     // appImage = docker.build('helloworld')
                     appImage = docker.build registry
                     // appimage.push("${commitId}")
-                    appImage.push("${env.BUILD_NUMBER}")
+                    // appImage.push("${env.BUILD_NUMBER}")
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                         // appimage.push("${commitId}")
                         appImage.push("${env.BUILD_NUMBER}")
-                    //     if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release') {
-                    //         appimage.push('latest')
-                    //         if (env.BRANCH_NAME == 'release') {
-                    //             appimage.push('app-${commitId}')
-                    //         }
-                    //     }
+                        if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release') {
+                            appimage.push('latest')
+                            if (env.BRANCH_NAME == 'release') {
+                                appimage.push('app-${commitId}')
+                            }
+                        }
                     }
                 }
             }
         }
-        // stage('Publish') {
-        //     steps {
-        //         script {
-        //             commitId = sh(returnStdout: true, script: 'git rev-parse --short HEAD')
-        //             def appimage = docker.build imageName + ":" + commitId.trim()
-        //             docker.withRegistry( 'https://docker.tansanrao.com', registryCredential ) {
-        //                 appimage.push()
-        //                 if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release') {
-        //                     appimage.push('latest')
-        //                     if (env.BRANCH_NAME == 'release') {
-        //                         appimage.push("release-" + "${COMMIT_SHA}")
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
     }
 }
