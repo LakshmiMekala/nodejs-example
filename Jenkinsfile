@@ -20,7 +20,7 @@ pipeline {
                     // commitId = sh(git diff --name-only HEAD~1)
                     // def appImage = docker.build imageName + ":" + commitId
                     // appImage = docker.build('helloworld')
-                    appimage = docker.build registry + ":$BUILD_NUMBER"
+                    appImage = docker.build registry + ":$BUILD_NUMBER"
                     // appimage.push("${commitId}")
                     // appImage.push("${env.BUILD_NUMBER}")
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
