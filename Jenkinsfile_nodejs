@@ -6,6 +6,7 @@ pipeline {
         dockerImage = ''
         namespace = 'default'
         release = 'medxui'
+        KUBECONFIG = '/home/lmekala/.kube/config'
     }
     stages  {
         stage('nodejs app Tests') {
@@ -34,6 +35,7 @@ pipeline {
             steps {
                 script {
                     echo "Deploying helm chart"
+                    sh 'export KUBECONFIG=${KUBECONFIG}'
                     sh 'helm upgrade --install --namespace ${namespace} ${release} \
                 --set image.repository=${registry} --set image.tag=${commitId} ui'
                     }
