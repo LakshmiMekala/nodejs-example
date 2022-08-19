@@ -20,12 +20,10 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
-                    commitId = sh(returnStdout: true, script: 'git rev-parse HEAD')
-                    commitId = "${commitId}".trim()
                     echo "commit id is - ${commitId} ----------- ${GIT_COMMIT}"
                     appImage = docker.build registry
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-                        appImage.push("${commitId}")
+                        appImage.push("${GIT_COMMIT}")
                         appImage.push("${env.BUILD_NUMBER}")
                     }
                 }
@@ -37,7 +35,7 @@ pipeline {
                     echo "Deploying helm chart"
                     sh 'export KUBECONFIG=${KUBECONFIG}'
                     sh 'helm upgrade --install --namespace ${namespace} ${release} \
-                --set image.repository=${registry} --set image.tag=${commitId} ui'
+                --set image.repository=${registry} --set image.tag=${GIT_COMMIT} ui'
                     }
                 }
         }
