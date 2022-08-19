@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        registry = 'testuser/nodejsexample'
+        registry = 'lmekala/nodejsexample'
         registryCredential = 'docker_Creds'
         dockerImage = ''
         namespace = 'default'
@@ -19,7 +19,8 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
-                    commitId = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+                    commitId = sh(returnStdout: true, script: 'git rev-parse HEAD')
+                    commitId = "${commitId}".trim()
                     echo "commit id is - ${commitId} ----------- ${GIT_COMMIT}"
                     appImage = docker.build registry
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
