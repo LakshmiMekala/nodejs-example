@@ -20,7 +20,7 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
-                    echo "commit id is - ${commitId} ----------- ${GIT_COMMIT}"
+                    echo "commit id is ${GIT_COMMIT}"
                     appImage = docker.build registry
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                         appImage.push("${GIT_COMMIT}")
