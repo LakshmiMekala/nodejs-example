@@ -1,9 +1,11 @@
 pipeline {
     agent any
     environment {
-        registry = "lmekala/nodejsexample"
+        registry = 'testuser/nodejsexample'
         registryCredential = 'docker_Creds'
         dockerImage = ''
+        namespace = 'default'
+        release = 'medxui'
     }
     stages  {
         stage('nodejs app Tests') {
@@ -17,24 +19,24 @@ pipeline {
         stage('Build docker image') {
             steps {
                 script {
-                    // commitId = sh(git diff --name-only HEAD~1)
-                    // def appImage = docker.build imageName + ":" + commitId
-                    // appImage = docker.build('helloworld')
+                    commitId = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+                    echo commit id is - ${commitId}
                     appImage = docker.build registry
-                    // appimage.push("${commitId}")
-                    // appImage.push("${env.BUILD_NUMBER}")
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-                        // appimage.push("${commitId}")
+                        appImage.push("${commitId}")
                         appImage.push("${env.BUILD_NUMBER}")
-                        if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release') {
-                            appImage.push('latest')
-                            if (env.BRANCH_NAME == 'release') {
-                                appImage.push('app-${commitId}')
-                            }
-                        }
                     }
                 }
             }
+        }
+        stage('Deploy helm chart docker image') {
+            steps {
+                script {
+                    echo "Deploying helm chart"
+                    sh 'helm upgrade --install --namespace ${namespace} ${release} \
+                --set image.repository=${registry} --set image.tag=${commitId} ui'
+                    }
+                }
         }
     }
 }

@@ -8,13 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LakshmiMekala/nodejs-example.git"
+    "url": "git+https://github.com/lakshmimekala/nodejs-example.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LakshmiMekala/nodejs-example/issues"
+    "url": "https://github.com/lakshmimekala/nodejs-example/issues"
   },
-  "homepage": "https://github.com/LakshmiMekala/nodejs-example#readme"
+  "homepage": "https://github.com/lakshmimekala/nodejs-example#readme"
 }
